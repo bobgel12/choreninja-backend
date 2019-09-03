@@ -10,7 +10,7 @@ const swaggerDocument = require('./swagger.json')
 // Connect to database
 let db = require('./config/default.json')
 mongoose
-    .connect(db.mongoURI, { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false })
+    .connect(`mongodb+srv://${process.env.dbUsername}:${process.env.dbPassword}@cluster0-uuxwd.mongodb.net/test?retryWrites=true&w=majority`, { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false })
     .then(() => console.log('MongoDB Connected...'))
     .catch(err => console.log(err));
 
@@ -23,5 +23,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Here is the API route
 app.use('/api/v1/job', job)
+app.get('/', (req, res) => {
+    res.status(200).send({ msg: "Welcome to Chore Ninja" })
+})
 
 module.exports = app
