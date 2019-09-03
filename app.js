@@ -8,7 +8,6 @@ const swaggerUi = require('swagger-ui-express')
 const swaggerDocument = require('./swagger.json')
 
 // Connect to database
-let db = require('./config/default.json')
 mongoose
     .connect(`mongodb+srv://${process.env.dbUsername}:${process.env.dbPassword}@cluster0-uuxwd.mongodb.net/test?retryWrites=true&w=majority`, { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false })
     .then(() => console.log('MongoDB Connected...'))
