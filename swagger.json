@@ -1,0 +1,178 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "ChoreNinja API",
+        "description": "ChoreNinja Back-end Application API",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:3000",
+    "basePath": "/api/v1",
+    "tags": [
+        {
+            "name": "Jobs",
+            "description": "API for jobs in the system"
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/job": {
+            "post": {
+                "tags": [
+                    "Jobs"
+                ],
+                "description": "Create new Job in system",
+                "parameters": [
+                    {
+                        "name": "Job",
+                        "in": "body",
+                        "description": "Job that we want to create",
+                        "schema": {
+                            "$ref": "#/definitions/Job"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New job is created",
+                        "schema": {
+                            "$ref": "#/definitions/Job"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Jobs"
+                ],
+                "summary": "Get all jobs in system",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Job"
+                        }
+                    }
+                }
+            }
+        },
+        "/job/{jobId}": {
+            "parameters": [
+                {
+                    "name": "jobId",
+                    "in": "path",
+                    "required": true,
+                    "description": "ID of job that we want to find",
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Jobs"
+                ],
+                "summary": "Get job with given ID",
+                "responses": {
+                    "200": {
+                        "description": "Job is found",
+                        "schema": {
+                            "$ref": "#/definitions/Job"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete Job with given ID",
+                "tags": [
+                    "Jobs"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Job is deleted",
+                        "schema": {
+                            "$ref": "#/definitions/Job"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update Job with give ID",
+                "tags": [
+                    "Jobs"
+                ],
+                "parameters": [
+                    {
+                        "name": "job",
+                        "in": "body",
+                        "description": "Job with new values of properties",
+                        "schema": {
+                            "$ref": "#/definitions/Job"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User is updated",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Job": {
+            "required": [
+                "_id"
+            ],
+            "properties": {
+                "_id": {
+                    "type": "string",
+                    "uniqueItems": true
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "post_date": {
+                    "type": "string"
+                },
+                "due_date": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "master": {
+                    "type": "string"
+                },
+                "ninja": {
+                    "type": "string"
+                }
+            }
+        },
+        "Jobs": {
+            "type": "array",
+            "$ref": "#/definitions/Job"
+        }
+    }
+}

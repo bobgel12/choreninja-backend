@@ -1,0 +1,3 @@
+{
+    "mongoURI": "mongodb+srv://phuc:seniorproject6!@cluster0-uuxwd.mongodb.net/test?retryWrites=true&w=majority"
+}
