@@ -28,7 +28,10 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //Configuring Passport
 app.use(expressSession({ secret: 'myChoreNinjaSecretKey' }));
-app.use(passport.initialize());
+app.use(passport.initialize({
+	resave: false,
+	saveUninitialized: false
+}));
 app.use(passport.session());
 
 //Initialize Passport
