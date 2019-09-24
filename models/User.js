@@ -7,6 +7,7 @@ const UserSchema = new mongoose.Schema({
     email: String,
     phone_number: String,
     is_ninja: {type: Boolean, default: false},
+    username: String,
     password: String,
 })
 

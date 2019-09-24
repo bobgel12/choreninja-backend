@@ -7,6 +7,11 @@ const job = require('./controllers/job.js')
 const swaggerUi = require('swagger-ui-express')
 const swaggerDocument = require('./swagger.json')
 
+const passport = require('passport');
+const expressSession = require('express-session');
+const initPassport = require('./authentication/init');
+const auth = require('./controllers/authentication')(passport);
+
 // Connect to database
 mongoose
     .connect(`mongodb+srv://${process.env.dbUsername}:${process.env.dbPassword}@cluster0-uuxwd.mongodb.net/test?retryWrites=true&w=majority`, { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false })
@@ -18,12 +23,27 @@ const app = express()
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false })); // support encoded bodies
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Here is the API route
+//Configuring Passport
+app.use(expressSession({ secret: 'myChoreNinjaSecretKey' }));
+app.use(passport.initialize({
+	resave: false,
+	saveUninitialized: false
+}));
+app.use(passport.session());
+
+//Initialize Passport
+initPassport(passport);
+
+app.use('/auth', auth);
 app.use('/api/v1/job', job)
 app.get('/', (req, res) => {
     res.status(200).send({ msg: "Welcome to Chore Ninja" })
+})
+app.get('/secret', passport.authenticate('jwt', { session: false }) , (req, res) => {
+    res.status(200).send({ msg: "Welcome to Chore Ninja secret" })
 })
 
 module.exports = app
