@@ -9,8 +9,6 @@ router.get("/", function (req, res) {
 router.post("/", function (req, res) {
     Job.create(req.body.job, (err, job) => {
         if (!err){
-            // job.master.id = req.user._id;
-            // job.master.username = req.user.username;
             job.save()
             res.status(200).send({ "err": null, item: job})
         } else{

@@ -1,27 +1,27 @@
 var express = require('express');
 var router = express.Router();
-
-var isAuthenticated = function (req, res, next) {
-    //if the user is authenticated in the session, call the next() to call the request handler
-    if(req.isAuthenticated()) 
-        return next();
-    //if user not authenticated then redirect him to login page.
-    res.redirect('/');
-}
+const jwt = require('jsonwebtoken');
 
 module.exports = function(passport){
-    
-    //Get login page
-    // router.get('/', function(req,res){
-    //     // res.render('index', {message: "Hello from auth"});
-    //     res.status(200).send({ message: "Hello from auth" });
-    // });
-    
     //Handle login page
-    router.post('/signin', passport.authenticate('login', {
-        successRedirect: '/auth/home',
-        failureRedirect: '/auth/failure',
-    }));
+    router.post('/signin', function (req, res, next) {
+        passport.authenticate('login', { session: false }, (err, user, info) => {
+            if (err || !user) {
+                return res.status(400).json({
+                    message: 'Something is not right',
+                    user: user
+                });
+            }
+            req.login(user, { session: false }, (err) => {
+                if (err) {
+                    res.send(err);
+                }
+                // generate a signed son web token with the contents of user object and return it in the response
+                const token = jwt.sign(user.username, 'choreninjastaff');
+                return res.json({ user, token });
+            });
+        })(req, res);
+    });
 
     // //Get registration page
     router.get('/signup', function(req, res)
@@ -36,7 +36,7 @@ module.exports = function(passport){
     }));
 
     //get homepage
-    router.get('/home', isAuthenticated, function(req, res){
+    router.get('/home', passport.authenticate('jwt', { session: false }), function(req, res){
         res.status(200).send({ message: "Successfully login" , user: req.user});
     });
 

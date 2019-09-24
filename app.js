@@ -42,5 +42,8 @@ app.use('/api/v1/job', job)
 app.get('/', (req, res) => {
     res.status(200).send({ msg: "Welcome to Chore Ninja" })
 })
+app.get('/secret', passport.authenticate('jwt', { session: false }) , (req, res) => {
+    res.status(200).send({ msg: "Welcome to Chore Ninja secret" })
+})
 
 module.exports = app
