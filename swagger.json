@@ -9,7 +9,7 @@
             "url": "https://opensource.org/licenses/MIT"
         }
     },
-    "host": "https://choreninja.herokuapp.com",
+    "host": "choreninja.herokuapp.com",
     "basePath": "/api/v1",
     "tags": [
         {
