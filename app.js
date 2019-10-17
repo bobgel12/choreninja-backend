@@ -37,10 +37,10 @@ app.use(passport.session());
 //Initialize Passport
 initPassport(passport);
 
-app.use('/auth', auth);
+app.use('/api/v1/auth', auth);
 app.use('/api/v1/job', job)
 app.get('/', (req, res) => {
-    res.status(200).send({ msg: "Welcome to Chore Ninja" })
+    res.status(200).send({ msg: "Welcome to Chore Ninja", api_endpoints : "https://choreninja.herokuapp.com/api/v1/", doc_endpoints: "https://choreninja.herokuapp.com/api-docs"})
 })
 app.get('/secret', passport.authenticate('jwt', { session: false }) , (req, res) => {
     res.status(200).send({ msg: "Welcome to Chore Ninja secret" })
