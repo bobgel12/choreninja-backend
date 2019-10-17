@@ -31,8 +31,8 @@ module.exports = function(passport){
 
     //Handle registration post
     router.post('/signup', passport.authenticate('signup', {
-        successRedirect: '/auth/aftersignup',
-        failureRedirect: '/auth/failure',
+        successRedirect: '/api/v1/auth/aftersignup',
+        failureRedirect: '/api/v1/auth/failure',
     }));
 
     //get homepage

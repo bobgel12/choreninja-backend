@@ -7,10 +7,10 @@ module.exports = function(passport)
 	passport.use('signup', new LocalStrategy({
 		passReqtoCallback: true
 	},
-		function (email, password, done) {
-			console.log("email, password", email, password)
+		function (username, password, done) {
+			console.log("username, password", username, password)
 			findOrCreateUser = function () {
-				User.findOne({ 'email': email }, function (err, user) {
+				User.findOne({ 'username': username }, function (err, user) {
 					if (err) {
 						console.log('Error in SignUp: ' + err);
 						return done(err);
@@ -23,7 +23,7 @@ module.exports = function(passport)
 					else {
 						var newUser = new User();
 
-						newUser.email = email;
+						newUser.username = username;
 						newUser.password = hash(password);
 						// newUser.email = req.body.email;
 						// newUser.first_name = req.body.first_name;

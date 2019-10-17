@@ -9,17 +9,17 @@ module.exports = function(passport){
     passport.use('login', new LocalStrategy({
         passReqtoCallback: true
         },
-        function (email, password, callback) {
-            //Check in mongo if a user with email exists or not
-            User.findOne({ 'email': email }, (err, user) => {
+        function (username, password, callback) {
+            //Check in mongo if a user with username exists or not
+            User.findOne({ 'username': username }, (err, user) => {
                     //In case of any error, return using the done method
                     if (err)
                         return callback(err);
 
                     //If user does not exist, log error & redirect back
                     if (!user) {
-                        console.log('User Not Found with email ' + email);
-                        return callback(null, false, { message: `User Not Found with email ${email}` });
+                        console.log('User Not Found with username ' + username);
+                        return callback(null, false, { message: `User Not Found with username ${username}` });
                     }
                     //If user exist but wrong password, log the error
                     if (!isValidPassword(user, password)) {
@@ -28,7 +28,6 @@ module.exports = function(passport){
                     }
                     //If user and password match, return user from done method (success)
                     console.log(user)
-                    user
                     return callback(null, user, { message: `Succesfully login` });
                 }
             );
