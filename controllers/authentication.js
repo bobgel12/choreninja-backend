@@ -3,6 +3,16 @@ var router = express.Router();
 const jwt = require('jsonwebtoken');
 
 module.exports = function(passport){
+	router.get("/google", passport.authenticate("google"));
+
+	router.get(
+	  "/google/callback",
+	  passport.authenticate("google", {
+	    successRedirect: "/api/v1/auth/aftersignup",
+	    failureRedirect: "/api/v1/auth/failure"
+	  })
+	);
+
     //Handle login page
     router.post('/signin', function (req, res, next) {
         passport.authenticate('login', { session: false }, (err, user, info) => {
@@ -21,7 +31,7 @@ module.exports = function(passport){
                 return res.json({ user, token });
             });
         })(req, res);
-    });
+	});
 
     // //Get registration page
     router.get('/signup', function(req, res)
@@ -53,7 +63,7 @@ module.exports = function(passport){
 
     //Handle Logout
     router.get('/failure', function(req, res){
-        res.status(200).send({ message: "Failure accur" });
+        res.status(500).send({ message: "Failure to login" });
     })
 
     return router;
