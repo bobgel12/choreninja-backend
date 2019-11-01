@@ -1,5 +1,4 @@
 var LocalStrategy = require('passport-local').Strategy;
-var FacebookStrategy = require('passport-facebook').Strategy;
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 const fbConfig = require('../authentication/social/socialapp.json')
 var { User } = require('../models/User');
