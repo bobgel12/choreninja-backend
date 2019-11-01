@@ -1,11 +1,28 @@
 var LocalStrategy = require('passport-local').Strategy;
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
-const fbConfig = require('../authentication/social/socialapp.json')
 var { User } = require('../models/User');
 var bCrypt = require('bcrypt-nodejs');
 const passportJWT = require("passport-jwt");
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
+let googleConfig = {}
+if (process.env.GOOGLE_CLIENT_ID){
+	googleConfig = {
+		clientID: process.env.GOOGLE_CLIENT_ID,
+		clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+		callbackURL: process.env.GOOGLE_CALLBACK_URL,
+		scope: ["email","profile", "openid"]
+	}
+} else{
+	Config = require('../authentication/social/socialapp.json')
+	googleConfig = {
+		clientID: Config['google']['app_id'],
+		clientSecret: Config['google']['app_secret'],
+		callbackURL: Config['google']['callback'],
+		scope: ["email","profile", "openid"]
+	 }
+}
+
 module.exports = function(passport){
 	passport.use('login', new LocalStrategy({
 		passReqtoCallback: true
@@ -36,13 +53,7 @@ module.exports = function(passport){
 	);
 
 	  passport.use(
-		new GoogleStrategy(
-		  {
-			clientID: process.env.GOOGLE_CLIENT_ID || fbConfig['google']['app_id'],
-			clientSecret: process.env.GOOGLE_CLIENT_SECRET || fbConfig['google']['app_secret'],
-			callbackURL: process.env.GOOGLE_CALLBACK_URL || fbConfig['google']['callback'],
-			scope: ["email","profile", "openid"]
-		  },
+		new GoogleStrategy(googleConfig,
 		  function(accessToken, refreshToken, profile, done) {
 			const { _json } = profile;
 			const { email, given_name, family_name } = _json;
