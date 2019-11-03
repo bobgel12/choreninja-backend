@@ -5,8 +5,11 @@ const middleware = require('../middleware');
 const passport = require('passport');
 var router = express.Router();
 router.get("/",  passport.authenticate('jwt', { session: false }), function (req, res) {
-	const { master_id , ninja_id } = req.query
+	const { master_id , ninja_id, ninja } = req.query
 	let mongoQuery = {}
+	if (ninja){
+		mongoQuery["ninja"] = ninja
+	}
 	if (master_id){
 		mongoQuery["master.id"] = master_id
 	}
