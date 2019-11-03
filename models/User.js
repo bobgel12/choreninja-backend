@@ -9,6 +9,8 @@ const UserSchema = new mongoose.Schema({
     is_ninja: {type: Boolean, default: false},
     username: String,
     password: String,
+    description: String,
+    skills: String,
 })
 
 module.exports = { UserSchema, User: mongoose.model('user', UserSchema) };
