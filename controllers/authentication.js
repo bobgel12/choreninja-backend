@@ -26,8 +26,9 @@ module.exports = function(passport){
                 if (err) {
                     res.send(err);
                 }
-                // generate a signed son web token with the contents of user object and return it in the response
-                const token = jwt.sign(user.username, 'choreninjastaff');
+				// generate a signed son web token with the contents of user object and return it in the response
+				console.log(user)
+                const token = jwt.sign({_id: user._id}, 'choreninjastaff');
                 return res.json({ user, token });
             });
         })(req, res);

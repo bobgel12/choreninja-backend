@@ -2,9 +2,11 @@ var LocalStrategy = require('passport-local').Strategy;
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var { User } = require('../models/User');
 var bCrypt = require('bcrypt-nodejs');
-const passportJWT = require("passport-jwt");
-const JWTStrategy = passportJWT.Strategy;
-const ExtractJWT = passportJWT.ExtractJwt;
+var JwtStrategy = require('passport-jwt').Strategy,
+    ExtractJwt = require('passport-jwt').ExtractJwt;
+var opts = {}
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.secretOrKey = 'choreninjastaff';
 let googleConfig = {}
 if (process.env.GOOGLE_CLIENT_ID){
 	googleConfig = {
@@ -84,20 +86,19 @@ module.exports = function(passport){
 		)
 	  );
 
-	passport.use(new JWTStrategy({
-		jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(), 
-		secretOrKey: 'choreninjastaff'
-	}, (jwtPayload, cb) => {
-			//find the user in db if needed
-			return User.findOne({ 'username': jwtPayload.username })
-				.then(user => {
-					return cb(null, user);
-				})
-				.catch(err => {
-					return cb(err);
-				});
-		}
-	));
+	passport.use(new JwtStrategy(opts, function(payload, done) {
+		// console.log("payload", payload)
+		// console.log("done", done)
+		User.findById(payload._id, function(err, user) {
+		  if (err) { return done(err, false); }
+			// console.log("user",user)
+		  if (user) {
+			done(null, user);
+		  } else {
+			done(null, false);
+		  }
+		});
+	  }))
 	
 	var isValidPassword = function(user, password) {
 		return bCrypt.compareSync(password, user.password);
