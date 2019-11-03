@@ -8,7 +8,7 @@ router.get("/",  passport.authenticate('jwt', { session: false }), function (req
 	const { master_id , ninja_id, ninja } = req.query
 	let mongoQuery = {}
 	if (ninja){
-		mongoQuery["ninja"] = ninja
+		mongoQuery["ninja"] = null
 	}
 	if (master_id){
 		mongoQuery["master.id"] = master_id
@@ -16,6 +16,7 @@ router.get("/",  passport.authenticate('jwt', { session: false }), function (req
 	if (ninja_id){
 		mongoQuery["ninja.id"] = ninja_id
 	}
+	
     Job.find(mongoQuery).then(jobs => res.status(200).send(jobs))
 })
 
