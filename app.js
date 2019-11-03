@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const job = require('./controllers/job.js')
+const user = require('./controllers/user.js')
 const swaggerUi = require('swagger-ui-express')
 const swaggerDocument = require('./swagger.json')
 
@@ -39,6 +40,7 @@ initPassport(passport);
 
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/job', job)
+app.use('/api/v1/user', user)
 app.get('/', (req, res) => {
     res.status(200).send({ msg: "Welcome to Chore Ninja", api_endpoints : "https://choreninja.herokuapp.com/api/v1/", doc_endpoints: "https://choreninja.herokuapp.com/api-docs"})
 })

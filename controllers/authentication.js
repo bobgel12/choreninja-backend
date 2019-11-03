@@ -45,9 +45,12 @@ module.exports = function(passport){
         failureRedirect: '/api/v1/auth/failure',
     }));
 
-    //get homepage
-    router.get('/home', passport.authenticate('jwt', { session: false }), function(req, res){
-        res.status(200).send({ message: "Successfully login" , user: req.user});
+    //get loggedin
+    router.get('/getLoggedIn', passport.authenticate('jwt', { session: false }), function(req, res){
+		User.findById(req.user._id, function(err, user){
+			if (err) res.status(500).send(null)
+			else res.status(200).send({user});
+        });
     });
 
     //get homepage
