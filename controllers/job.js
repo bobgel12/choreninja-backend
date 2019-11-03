@@ -17,7 +17,7 @@ router.get("/",  passport.authenticate('jwt', { session: false }), function (req
 		mongoQuery["ninja.id"] = ninja_id
 	}
 	
-    Job.find(mongoQuery).then(jobs => res.status(200).send(jobs))
+    Job.find(mongoQuery).sort({post_date:-1}).then(jobs => res.status(200).send(jobs))
 })
 
 router.post("/", passport.authenticate('jwt', { session: false }), function (req, res) {
