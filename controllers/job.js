@@ -43,7 +43,7 @@ router.post("/", passport.authenticate('jwt', { session: false }), function (req
 	})
 })
 
-router.put("/:jobId", passport.authenticate('jwt', { session: false }), middleware.isThisYourPost ,function (req, res) {
+router.put("/:jobId", passport.authenticate('jwt', { session: false }) ,function (req, res) {
 	Job.findByIdAndUpdate(req.params.jobId, req.body.job, function (err, updatedJob) {
 		if (!err) {
 			res.status(200).send({ "err": null, item: updatedJob })
