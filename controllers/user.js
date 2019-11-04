@@ -12,5 +12,26 @@ router.put("/:userId", function (req, res) {
         }
     });
 })
+
+router.post("/conversation", function (req, res) {
+	const {conversationId, masterId, ninjaId} = req.body
+    User.findById(masterId, function (err, master) {
+        if (!err) {
+			master.conversationId.push(conversationId);
+			master.save();
+			User.findById(ninjaId, function (err, ninja) {
+				if (!err) {
+					ninja.conversationId.push(conversationId);
+					ninja.save();
+					res.status(200).send({ "err": null })
+				} else {
+					res.status(500).send({ "err": err })
+				}
+			});
+        } else {
+			res.status(500).send({ "err": err })
+        }
+    });
+})
     
 module.exports = router;

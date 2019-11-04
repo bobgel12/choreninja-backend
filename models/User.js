@@ -11,6 +11,7 @@ const UserSchema = new mongoose.Schema({
     password: String,
     description: String,
     skills: String,
+    conversationId: [String],
 })
 
 module.exports = { UserSchema, User: mongoose.model('user', UserSchema) };
