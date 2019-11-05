@@ -3,6 +3,7 @@ const { UserSchema } = require('./User')
 
 const JobSchema = new mongoose.Schema({
     name: String,
+    zipcode: String,
     price: Number,
     post_date: { type: Date, default: Date.now },
     due_date: { type: Date, default: () => Date.now() + 7 * 24 * 60 * 60 * 1000 },
