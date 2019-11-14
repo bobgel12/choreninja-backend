@@ -11,7 +11,13 @@ const UserSchema = new mongoose.Schema({
     password: String,
     description: String,
     skills: String,
-    conversationId: [String],
+    conversationId: [{
+		id: String,
+		info: {
+			lastMessage: String,
+			lastUpdate: { type: Date, default: Date.now }
+		}
+	}],
 })
 
 module.exports = { UserSchema, User: mongoose.model('user', UserSchema) };

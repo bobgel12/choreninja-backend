@@ -14,14 +14,51 @@ router.put("/:userId", function (req, res) {
 })
 
 router.post("/conversation", function (req, res) {
-	const {conversationId, masterId, ninjaId} = req.body
+	const {conversationId, masterId, ninjaId, lastMessage } = req.body
+	conObject = {
+		id: conversationId,
+		info: {
+			lastMessage: lastMessage,
+			lastUpdate: Date.now
+		}
+	}
     User.findById(masterId, function (err, master) {
         if (!err) {
-			master.conversationId.push(conversationId);
+			master.conversationId.unshift(conObject);
 			master.save();
 			User.findById(ninjaId, function (err, ninja) {
 				if (!err) {
-					ninja.conversationId.push(conversationId);
+					ninja.conversationId.unshift(conObject);
+					ninja.save();
+					res.status(200).send({ "err": null })
+				} else {
+					res.status(500).send({ "err": err })
+				}
+			});
+        } else {
+			res.status(500).send({ "err": err })
+        }
+    });
+})
+
+router.put("/conversation", function (req, res) {
+	const {conversationId, masterId, ninjaId, lastMessage } = req.body
+	conObject = {
+		id: conversationId,
+		info: {
+			lastMessage: lastMessage,
+			lastUpdate: Date.now
+		}
+	}
+    User.findById(masterId, function (err, master) {
+        if (!err) {
+			master.conversationId.splice(master.conversationId.findIndex((element) => element.id == conversationId), 1)
+			master.conversationId.unshift(conObject);
+			master.save();
+			User.findById(ninjaId, function (err, ninja) {
+				if (!err) {
+					master.conversationId.splice(master.conversationId.findIndex((element) => element.id == conversationId), 1)
+					ninja.conversationId.unshift(conObject);
 					ninja.save();
 					res.status(200).send({ "err": null })
 				} else {
