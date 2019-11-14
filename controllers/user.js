@@ -15,21 +15,24 @@ router.put("/:userId", function (req, res) {
 
 router.post("/conversation", function (req, res) {
 	const {conversationId, masterId, ninjaId, lastMessage } = req.body
-	conObject = {
+	let conObject = {
 		id: conversationId,
 		info: {
 			lastMessage: lastMessage,
-			lastUpdate: Date.now
+			lastUpdate: Date.now()
 		}
 	}
+	console.log(conObject)
     User.findById(masterId, function (err, master) {
         if (!err) {
+			console.log(master)
+			console.log(master.conversationId)
 			master.conversationId.unshift(conObject);
-			master.save();
+			master.update();
 			User.findById(ninjaId, function (err, ninja) {
 				if (!err) {
 					ninja.conversationId.unshift(conObject);
-					ninja.save();
+					ninja.update();
 					res.status(200).send({ "err": null })
 				} else {
 					res.status(500).send({ "err": err })
@@ -54,12 +57,12 @@ router.put("/conversation", function (req, res) {
         if (!err) {
 			master.conversationId.splice(master.conversationId.findIndex((element) => element.id == conversationId), 1)
 			master.conversationId.unshift(conObject);
-			master.save();
+			master.update();
 			User.findById(ninjaId, function (err, ninja) {
 				if (!err) {
 					master.conversationId.splice(master.conversationId.findIndex((element) => element.id == conversationId), 1)
 					ninja.conversationId.unshift(conObject);
-					ninja.save();
+					ninja.update();
 					res.status(200).send({ "err": null })
 				} else {
 					res.status(500).send({ "err": err })
