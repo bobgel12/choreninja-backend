@@ -22,17 +22,19 @@ router.post("/conversation", function (req, res) {
 			lastUpdate: Date.now()
 		}
 	}
-	console.log(conObject)
+	// console.log(conObject)
     User.findById(masterId, function (err, master) {
         if (!err) {
-			console.log(master)
-			console.log(master.conversationId)
+			// console.log(master)
+			// console.log(master.conversationId)
 			master.conversationId.unshift(conObject);
-			master.update();
+			// console.log(master.conversationId)
+			master.save();
 			User.findById(ninjaId, function (err, ninja) {
 				if (!err) {
 					ninja.conversationId.unshift(conObject);
-					ninja.update();
+					// console.log(ninja.conversationId)
+					ninja.save();
 					res.status(200).send({ "err": null })
 				} else {
 					res.status(500).send({ "err": err })
@@ -57,12 +59,12 @@ router.put("/conversation", function (req, res) {
         if (!err) {
 			master.conversationId.splice(master.conversationId.findIndex((element) => element.id == conversationId), 1)
 			master.conversationId.unshift(conObject);
-			master.update();
+			master.save();
 			User.findById(ninjaId, function (err, ninja) {
 				if (!err) {
 					master.conversationId.splice(master.conversationId.findIndex((element) => element.id == conversationId), 1)
 					ninja.conversationId.unshift(conObject);
-					ninja.update();
+					ninja.save();
 					res.status(200).send({ "err": null })
 				} else {
 					res.status(500).send({ "err": err })
