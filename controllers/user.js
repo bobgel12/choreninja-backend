@@ -17,9 +17,11 @@ router.post("/conversation", function (req, res) {
 	const {conversationId, masterId, ninjaId, lastMessage } = req.body
 	let conObject = {
 		id: conversationId,
+		masterId: masterId,
+		ninjaId: ninjaId,
 		info: {
 			lastMessage: lastMessage,
-			lastUpdate: Date.now()
+			lastUpdate: Date.now(),
 		}
 	}
 	// console.log(conObject)
@@ -50,6 +52,8 @@ router.put("/conversation", function (req, res) {
 	const {conversationId, masterId, ninjaId, lastMessage } = req.body
 	conObject = {
 		id: conversationId,
+		masterId: masterId,
+		ninjaId: ninjaId,
 		info: {
 			lastMessage: lastMessage,
 			lastUpdate: Date.now

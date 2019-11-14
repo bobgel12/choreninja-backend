@@ -13,6 +13,8 @@ const UserSchema = new mongoose.Schema({
     skills: String,
     conversationId: [{
 		id: String,
+		masterId: String,
+		ninjaId: String,
 		info: {
 			lastMessage: String,
 			lastUpdate: { type: Date, default: Date.now }
