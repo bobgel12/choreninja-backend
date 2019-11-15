@@ -59,14 +59,16 @@ router.put("/conversation/update", function (req, res) {
 			lastUpdate: Date.now()
 		}
 	}
+	console.log("conObject",conObject)
     User.findById(masterId, function (err, master) {
+		console.log("master", master)
         if (!err) {
 			master.conversationId.splice(master.conversationId.findIndex((element) => element.id == conversationId), 1)
 			master.conversationId.unshift(conObject);
 			master.save();
 			User.findById(ninjaId, function (err, ninja) {
 				if (!err) {
-					master.conversationId.splice(master.conversationId.findIndex((element) => element.id == conversationId), 1)
+					ninja.conversationId.splice(ninja.conversationId.findIndex((element) => element.id == conversationId), 1)
 					ninja.conversationId.unshift(conObject);
 					ninja.save();
 					res.status(200).send({ "err": null })
