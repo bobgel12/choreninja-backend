@@ -67,6 +67,7 @@ router.put("/conversation/update", function (req, res) {
 			master.conversationId.unshift(conObject);
 			master.save();
 			User.findById(ninjaId, function (err, ninja) {
+				console.log("ninja", ninja)
 				if (!err) {
 					ninja.conversationId.splice(ninja.conversationId.findIndex((element) => element.id == conversationId), 1)
 					ninja.conversationId.unshift(conObject);
