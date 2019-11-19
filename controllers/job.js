@@ -18,6 +18,7 @@ router.get("/",  passport.authenticate('jwt', { session: false }), function (req
 	}
 	if (name){
 		mongoQuery["name"] = new RegExp(`${name}`, 'i')
+		mongoQuery["ninja"] = null
 	}
 	console.log("mongoQuery",mongoQuery)
     Job.find(mongoQuery).sort({post_date:-1}).then(jobs => res.status(200).send(jobs))
