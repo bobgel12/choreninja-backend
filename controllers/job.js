@@ -5,7 +5,7 @@ const middleware = require('../middleware');
 const passport = require('passport');
 var router = express.Router();
 router.get("/",  passport.authenticate('jwt', { session: false }), function (req, res) {
-	const { master_id , ninja_id, ninja } = req.query
+	const { master_id , ninja_id, ninja, name } = req.query
 	let mongoQuery = {}
 	if (ninja){
 		mongoQuery["ninja"] = null
@@ -16,7 +16,10 @@ router.get("/",  passport.authenticate('jwt', { session: false }), function (req
 	if (ninja_id){
 		mongoQuery["ninja.id"] = ninja_id
 	}
-	
+	if (name){
+		mongoQuery["name"] = new RegExp(`${name}`, 'i')
+	}
+	console.log("mongoQuery",mongoQuery)
     Job.find(mongoQuery).sort({post_date:-1}).then(jobs => res.status(200).send(jobs))
 })
 
